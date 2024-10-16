@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define max 5
+
+void insert(int q[], int *front, int *rear, int item) {
+    if (*rear == max - 1) {
+        printf("\nQueue Overflow");
+    } else {
+        if (*front == -1) {
+            *front = 0;
+        }
+        q[++(*rear)] = item;
+        printf("\nSuccessfully inserted %d", item);
+    }
+}
+
+void delete(int q[], int *front, int *rear) {
+    if (*front == -1 || *front > *rear) {
+        printf("\nQueue Underflow");
+    } else {
+        printf("\nSuccessfully deleted %d", q[*front]);
+        (*front)++;
+        if (*front > *rear) {
+            *front = *rear = -1;
+        }
+    }
+}
+
+void display(int q[], int *front, int *rear) {
+    if (*front == -1 || *front > *rear) {
+        printf("\nQueue is empty");
+    } else {
+        for (int i = *front; i <= *rear; i++) {
+            printf("\nItem %d : %d", (i + 1), q[i]);
+        }
+    }
+}
+
+int main() {
+    int q[max];
+    int front = -1;
+    int rear = -1;
+    int item, choice;
+
+    while (1) {
+        printf("\nEnter your choice:");
+        printf("\n1. Insert");
+        printf("\n2. Delete");
+        printf("\n3. Display");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("\nEnter item: ");
+            scanf("%d", &item);
+            insert(q, &front, &rear, item);
+            break;
+        case 2:
+            delete(q, &front, &rear);
+            break;
+        case 3:
+            display(q, &front, &rear);
+            break;
+        default:
+            printf("\nInvalid choice, please try again.");
+            break;
+        }
+    }
+}
