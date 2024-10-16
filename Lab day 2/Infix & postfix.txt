@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#define max 100
+
+int top = -1;
+char stack[max];
+
+void push(char item)
+{
+    stack[++(top)]=item;
+}
+char pop()
+{
+    return stack[(top)--];
+}
+int prec(char item)
+{
+    switch(item)
+    {
+    case '(':
+        return 1;
+    case '+':
+    case '-':
+        return 2;
+    case '*':
+    case '/':
+        return 3;
+    default:
+        return -1;
+    }
+}
+void infixtopostfix(char *infix)
+{
+    char postfix[max];
+    int i = 0;
+    for(int k=0;infix[k]!='\0';k++)
+    {
+        char item=infix[k];
+        if (isalnum(item))
+        {
+            postfix[i++]=item;
+        }
+        else if (item=='(')
+        {
+            push(item);
+        }
+        else if (item==')')
+        {
+            while (top != -1 && stack[top]!='(')
+            {
+                postfix[i++]=pop();
+            }
+            pop();
+        }
+        else
+        {
+            while (top!= -1 && prec(item)<=prec(stack[top]))
+            {
+                postfix[i++]=pop();
+            }
+            push(item);
+        }
+    }
+    while(top!= -1)
+    {
+        postfix[i++]=pop();
+    }
+    postfix[i] = '\0';
+    printf("\nPostfix Expression: \n %s", postfix);
+}
+int main()
+{
+    char infix[max];
+    printf("\nEnter your infix expression: \n");
+    scanf("%s",infix);
+    infixtopostfix(infix);
+    return 0;
+}
