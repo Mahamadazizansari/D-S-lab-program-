@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int value;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* newNode(int value) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->value = value;
+    node->left = node->right = NULL;
+    return node;
+}
+
+struct Node* insert(struct Node* root, int value) {
+    if (root == NULL) return newNode(value);
+    if (value < root->value)
+        root->left = insert(root->left, value);
+    else
+        root->right = insert(root->right, value);
+    return root;
+}
+
+void inorder(struct Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->value);
+        inorder(root->right);
+    }
+}
+
+void preorder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->value);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(struct Node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->value);
+    }
+}
+
+int main() {
+    struct Node* root = NULL;
+    int n, value, choice;
+
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+
+    printf("Enter %d values to insert :\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &value);
+        root = insert(root, value);
+    }
+
+    while (1) {
+        printf("\nChoose traversal to display:\n");
+        printf("1. In-order\n");
+        printf("2. Pre-order\n");
+        printf("3. Post-order\n");
+        printf("4. Exit\n");
+        printf("Enter your choice (1/2/3/4): ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("In-order: ");
+                inorder(root);
+                printf("\n");
+                break;
+            case 2:
+                printf("Pre-order: ");
+                preorder(root);
+                printf("\n");
+                break;
+            case 3:
+                printf("Post-order: ");
+                postorder(root);
+                printf("\n");
+                break;
+            case 4:
+                printf("Exiting.\n");
+                return 0;
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+
+    return 0;
+}
+
